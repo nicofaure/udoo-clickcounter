@@ -7,6 +7,17 @@ var options = {
   path: '/',
   port: '3000'
 };
+var leds = [udoo.outputPin(5)
+			,udoo.outputPin(6)
+			,udoo.outputPin(7)
+			,udoo.outputPin(8)
+			,udoo.outputPin(9)
+			,udoo.outputPin(10)
+			,udoo.outputPin(11)
+			,udoo.outputPin(12)
+			,udoo.outputPin(13)
+			,udoo.outputPin(14)
+			,udoo.outputPin(15)]
 
 callback = function(response) {
 	var str = '';
@@ -19,8 +30,14 @@ callback = function(response) {
 	//the whole response has been recieved, so we just print it out here
 	response.on('end', function () {
 		var jsonObject = JSON.parse(str);
-		for (var i=0; i < jsonObject.clicks.length; i++){
-			console.log(jsonObject.clicks[i]);
+		for (var i=0; i <= 10; i++){
+			if(jsonObject.clicks[i]){
+				leds[0].set(jsonObject.clicks[i]);
+				console.log(jsonObject.clicks[i]);
+			}else{
+				console.log(0);
+				leds[0].set(0);
+			}
 		}
 	});
 }
@@ -34,24 +51,3 @@ function doApiCall(){
 	setTimeout(loop, 100);
 }());
 
-
-
-/*
-var led0 = udoo.outputPin(5);
-var led1 = udoo.outputPin(6);
-var led2 = udoo.outputPin(7);
-var led3 = udoo.outputPin(8);
-var led4 = udoo.outputPin(9);
-var led5 = udoo.outputPin(10);
-var led6 = udoo.outputPin(11);
-var led7 = udoo.outputPin(12);
-var led8 = udoo.outputPin(13);
-var led9 = udoo.outputPin(14);
-var led10 = udoo.outputPin(15);
- 
-(function loop() {
-  led.set(on = !on, function () {
-    setTimeout(loop, 1000);
-  });
-}());
-*/
